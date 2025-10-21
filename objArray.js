@@ -4,4 +4,4 @@ const students = [
 ];
 
 const studentMap = new Map(students.map(student => [student.id, student.name]));
-console.log(studentMap);
+console.log(studentMap.get);
