@@ -1,0 +1,96 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.*" %>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GlobalBus Java Edition</title>
+    <style>
+        :root { --primary: #0d47a1; --gold: #ffd600; --bg: #f4f7f6; }
+        body { font-family: sans-serif; background: var(--bg); margin: 0; }
+        header { background: var(--primary); color: white; padding: 20px; text-align: center; }
+        .container { width: 85%; max-width: 1000px; margin: 30px auto; }
+        
+        /* Bus Card Styling */
+        .bus-card { 
+            background: white; display: flex; margin-bottom: 20px; 
+            border-radius: 10px; overflow: hidden; box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+        }
+        .bus-img { width: 300px; object-fit: cover; }
+        .bus-details { padding: 20px; flex: 1; }
+        .booking-side { 
+            padding: 20px; background: #eee; width: 180px; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+        }
+        .price { font-size: 24px; color: #2e7d32; font-weight: bold; }
+        .btn { 
+            background: var(--gold); border: none; padding: 10px 20px; 
+            cursor: pointer; font-weight: bold; margin-top: 10px; border-radius: 5px; 
+        }
+    </style>
+</head>
+<body>
+
+<%
+    // JAVA LOGIC: Defining the Bus Data Model
+    class Bus {
+        String name, route, time, image, amenities;
+        double price;
+
+        Bus(String n, String r, String t, String img, String am, double p) {
+            this.name = n; this.route = r; this.time = t; 
+            this.image = img; this.amenities = am; this.price = p;
+        }
+    }
+
+    // List of 6 Real Buses
+    List<Bus> busList = new ArrayList<>();
+    busList.add(new Bus("Volvo Club Class", "London to Paris", "09:00 AM", "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=600", "WiFi, AC, Snacks", 55.0));
+    busList.add(new Bus("Scania Multi-Axle", "Berlin to Prague", "11:30 AM", "https://images.unsplash.com/photo-1570125909232-eb263c188f7e?w=600", "Sleeper, Water", 42.0));
+    busList.add(new Bus("Intercity Turbo", "NYC to DC", "02:15 PM", "https://images.unsplash.com/photo-1512413316925-fd4b93f31521?w=600", "USB, Recliner", 30.0));
+    busList.add(new Bus("Greenline Electric", "Amsterdam to Utrecht", "04:45 PM", "https://images.unsplash.com/photo-1632276513361-ec853114382e?w=600", "Eco-Friendly, WiFi", 15.0));
+    busList.add(new Bus("Highland Express", "Edinburgh to Highlands", "07:00 AM", "https://images.unsplash.com/photo-1590674899484-13da0d1b58f5?w=600", "Panoramic View, AC", 65.0));
+    busList.add(new Bus("Sunset Cruiser", "Madrid to Lisbon", "08:00 PM", "https://images.unsplash.com/photo-1557223562-6c77ef16210f?w=600", "Luxury Sleeper, Meal", 80.0));
+%>
+
+<header>
+    <h1>GlobalBus Booking System (Java/JSP)</h1>
+</header>
+
+<div class="container">
+    <%-- JAVA LOOP: Iterating through the bus list to generate HTML --%>
+    <% for(Bus bus : busList) { %>
+        <div class="bus-card">
+            <img src="<%= bus.image %>" class="bus-img" alt="Bus Image">
+            <div class="bus-details">
+                <h2><%= bus.name %></h2>
+                <p><strong>Route:</strong> <%= bus.route %></p>
+                <p><strong>Time:</strong> <%= bus.time %></p>
+                <p><small>Amenities: <%= bus.amenities %></small></p>
+            </div>
+            <div class="booking-side">
+                <div class="price">$<%= bus.price %></div>
+                <form method="POST">
+                    <input type="hidden" name="busName" value="<%= bus.name %>">
+                    <input type="hidden" name="busPrice" value="<%= bus.price %>">
+                    <button type="submit" class="btn">Confirm Booking</button>
+                </form>
+            </div>
+        </div>
+    <% } %>
+
+    <%-- JAVA LOGIC: Handling the POST Request (Booking) --%>
+    <%
+        if ("POST".equalsIgnoreCase(request.getMethod())) {
+            String selectedBus = request.getParameter("busName");
+            String price = request.getParameter("busPrice");
+    %>
+        <div style="background: #c8e6c9; padding: 20px; border-radius: 10px; text-align: center;">
+            <h3>Booking Successful!</h3>
+            <p>You have booked: <strong><%= selectedBus %></strong></p>
+            <p>Total Paid: <strong>$<%= price %></strong></p>
+        </div>
+    <% } %>
+</div>
+
+</body>
+</html>
